@@ -24,11 +24,11 @@ using kOS.Suffixed;
 
 namespace kOS.Utils
 {
-    [kOSAddon("UTILS")]
-    [Safe.Utilities.KOSNomenclature("UTILSAddon")]
-    public class Addon : Suffixed.Addon
+    [kOSAddon("OBT")]
+    [Safe.Utilities.KOSNomenclature("OBTAddon")]
+    public class Orbital : Suffixed.Addon
     {
-        public Addon(SharedObjects shared) : base(shared)
+        public Orbital(SharedObjects shared) : base(shared)
         {
             InitializeSuffixes();
         }
