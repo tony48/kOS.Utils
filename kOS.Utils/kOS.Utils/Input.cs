@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (c) 2020 tony48, 2015-2016 djungelorm
+    Copyright (c) 2020 tony48
     This file is part of kOS.Utils.
 
     kOS.Utils is free software: you can redistribute it and/or modify

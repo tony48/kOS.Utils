@@ -56,10 +56,12 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Landing.cs" />
         <Compile Include="Orbital.cs" />
         <Compile Include="Input.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Screen.cs" />
+        <Compile Include="SerenityAddon.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
