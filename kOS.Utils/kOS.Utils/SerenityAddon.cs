@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with kOS.Utils.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+/*
 using System.Diagnostics.CodeAnalysis;
 using kOS.AddOns;
 using kOS.Safe.Encapsulation;
@@ -158,3 +160,4 @@ namespace kOS.Utils
         }
     }
 }
+*/
