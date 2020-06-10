@@ -41,6 +41,7 @@ namespace kOS.Utils
             AddSuffix("GETROTOR", new OneArgsSuffix<RotorValue, PartValue>(GetRotor));
             AddSuffix("GETSERVO", new OneArgsSuffix<ServoValue, PartValue>(GetServo));
             AddSuffix("GETHINGE", new OneArgsSuffix<HingeValue, PartValue>(GetHinge));
+            AddSuffix("GETPISTON", new OneArgsSuffix<PistonValue, PartValue>(GetPiston));
         }
 
         private RotorValue GetRotor(PartValue part)
