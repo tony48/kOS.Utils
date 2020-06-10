@@ -65,3 +65,190 @@ Example : ADDONS:SCREEN:TAKE().
 - Take()
 
   Takes a screenshot and saves it in KSP/Screenshots_kOS.
+
+
+## Impact Prediction
+
+To access impact prediction functions, use ADDONS:IMPACT.
+
+THESE FUNCTIONS DO NOT TAKE INTO ACCOUNT THE ATMOSPHERIC FORCES. If you want this, use trajectories or go to the Predictor section.
+
+- GetImpactPos(Vessel vessel)
+
+  Returns the impact location for the vessel in [GeoCoordinates](https://ksp-kos.github.io/KOS/math/geocoordinates.html#structure:GEOCOORDINATES).
+
+## Predictor
+
+Functions to predict the impact position on an atmospheric body.
+
+To access predictor functions, use ADDONS:PR.
+
+- ImpactPos(Vessel vessel)
+
+  Returns the impact location for the vessel in [GeoCoordinates](https://ksp-kos.github.io/KOS/math/geocoordinates.html#structure:GEOCOORDINATES).
+  
+- HasImpact(Vessel vessel)
+
+  Returns true if the vessel has an impact position.
+  
+## BreakingGround 
+
+Functions to control Breaking Ground robotic parts.
+
+To access predictor functions, use ADDONS:BG.
+
+- GetRotor(Part part)
+
+  Returns the Rotor object found on the part.
+  
+- GetHinge(Part part)
+
+  Returns the Hinge object found on the part.
+  
+- GetPiston(Part part)
+
+  Returns the Piston object found on the part.
+
+- GetServo(Part part)
+
+  Returns the Servo object found on the part.
+  
+#### Rotor
+
+- ToggleDirection()
+
+  Toggle the rotor direction.
+  
+- Counterclockwise
+
+  True if the rotor rotates counterclockwise.
+
+- RPMLimit
+
+  The rotor rpm limit.
+  
+- MaxTorque
+
+  The rotor max torque.
+  
+- CurrentRPM
+
+  The rotor current RPM.
+  
+- Engage()
+
+  Engage the servo.
+
+- Disengage()
+
+  Disengage the servo.
+  
+- Locked
+
+  Get or set the lock of the servo.
+  
+- Part
+
+  The part containing the servo.
+
+#### Servo
+
+- Inverted
+
+  True if the servo is inverted.
+
+- TargetAngle
+
+  Get or set the target angle.
+
+- CurrentAngle
+
+  Get the current angle,
+  
+- Speed
+
+  Get or set the speed.
+  
+- Engage()
+
+  Engage the servo.
+
+- Disengage()
+
+  Disengage the servo.
+  
+- Locked
+
+  Get or set the lock of the servo.
+  
+- Part
+
+  The part containing the servo.
+
+#### Hinge
+
+- TargetAngle
+
+  Get or set the target angle.
+
+- CurrentAngle
+
+  Get the current angle,
+  
+- Speed
+
+  Get or set the speed.
+  
+- Engage()
+
+  Engage the servo.
+
+- Disengage()
+
+  Disengage the servo.
+  
+- Locked
+
+  Get or set the lock of the servo.
+  
+- Part
+
+  The part containing the servo.
+
+#### Piston
+
+- Extend()
+  
+  Extend the piston.
+  
+- Retract()
+
+  Retract the piston.
+  
+- TargetExtension
+
+  Get or set the target extension.
+  
+- CurrentExtension
+
+  The piston current extension.
+
+- Speed
+
+  Get or set the speed.
+  
+- Engage()
+
+  Engage the servo.
+
+- Disengage()
+
+  Disengage the servo.
+  
+- Locked
+
+  Get or set the lock of the servo.
+  
+- Part
+
+  The part containing the servo.
