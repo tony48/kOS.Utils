@@ -45,7 +45,7 @@ namespace kOS.Utils
             Vessel internalVessel = vessel.Vessel;
             double latitude = 0.0;
             double longitude = 0.0;
-            Vector3d vector3d = new Vector3d();
+            //Vector3d vector3d = new Vector3d();
             CelestialBody referenceBody = internalVessel.GetOrbit().referenceBody;
             bool impactHappening = false;
             if (internalVessel.situation == Vessel.Situations.LANDED)
