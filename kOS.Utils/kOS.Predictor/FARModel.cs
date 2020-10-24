@@ -39,7 +39,9 @@ namespace Predictor
         {
             //Debug.Log("Trajectories: getting FAR forces");
             if (vessel_ == null || vessel_.packed)
+            {
                 return Vector3.zero;
+            }
 
             if (airVelocity.x == 0d || airVelocity.y == 0d || airVelocity.z == 0d)
             {

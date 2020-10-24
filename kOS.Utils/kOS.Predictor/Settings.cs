@@ -3,6 +3,7 @@
   Copyright© (c) 2014-2018 A.Korsunsky, (aka fat-lobyte).
   Copyright© (c) 2017-2018 S.Gray, (aka PiezPiedPy).
   Copyright© (c) 2020 tony48.
+  Copyright© (c) 2020 Zoeille.
   This file is part of Predictor.
   Predictor is available under the terms of GPL-3.0-or-later.
   See the LICENSE.md file for more details.
@@ -21,9 +22,9 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-namespace Predictor
+namespace Predictor  
 {
-    static class Settings
+    static class Settings 
     {
         //private class Persistent: Attribute
         //{
@@ -64,40 +65,44 @@ namespace Predictor
         //[Persistent(Default: true)]
         public static bool AutoUpdateAerodynamicModel => true;
 
-        //[Persistent(Default: null)]
-        //public Rect MapGUIWindowPos { get; set; }
+    //[Persistent(Default: null)]
+    //public Rect MapGUIWindowPos { get; set; }
 
-        //[Persistent(Default: false)]
-        //public bool MainGUIEnabled { get; set; }
+    //[Persistent(Default: false)]
+    //public bool MainGUIEnabled { get; set; }
 
-        //[Persistent(Default: null)]
-        //public Vector2 MainGUIWindowPos { get; set; }
+    //[Persistent(Default: null)]
+    //public Vector2 MainGUIWindowPos { get; set; }
 
-        //Persistent(Default: null)]
-        //public int MainGUICurrentPage { get; set; }
+    //Persistent(Default: null)]
+    //public int MainGUICurrentPage { get; set; }
 
-        //[Persistent(Default: false)]
-        //public bool GUIEnabled { get; set; }
+    //[Persistent(Default: false)]
+    //public bool GUIEnabled { get; set; }
 
-        //[Persistent(Default: true)]
-        //public bool NewGui { get; set; }
+    //[Persistent(Default: true)]
+    //public bool NewGui { get; set; }
 
-        //[Persistent(Default: 2.0d)]
-        public static double IntegrationStepSize => 2d;
+    //[Persistent(Default: 2.0d)]
+    public static double IntegrationStepSize => 2d;
 
         //[Persistent(Default: 4)]
-        public static int MaxPatchCount => 4;
+        public static int MaxPatchCount => 10;
 
         //[Persistent(Default: 15)]
-        public static int MaxFramesPerPatch => 15;
+        public static int MaxFramesPerPatch => 50;
 
         //[Persistent(Default: false)]
-        public static bool UseCache => false;
+        public static bool UseCache => true;
 
         //[Persistent(Default: true)]
         public static bool DefaultDescentIsRetro => true;
 
+
+
+
         #endregion
+
 
         //private KSP.IO.PluginConfiguration config;
 

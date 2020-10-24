@@ -3,6 +3,7 @@
   Copyright© (c) 2014-2018 A.Korsunsky, (aka fat-lobyte).
   Copyright© (c) 2017-2018 S.Gray, (aka PiezPiedPy).
   Copyright© (c) 2020 tony48.
+  Copyright© (c) 2020 Zoeille.
   This file is part of Predictor.
   Predictor is available under the terms of GPL-3.0-or-later.
   See the LICENSE.md file for more details.
@@ -22,6 +23,9 @@ using System.Diagnostics;
 using UnityEngine;
 using System.Linq;
 using System.Threading;
+using UnityEngine.Assertions.Must;
+using Debug = UnityEngine.Debug;
+
 // ReSharper disable InconsistentNaming
 
 namespace Predictor
@@ -102,10 +106,10 @@ namespace Predictor
                 // if there is no ongoing partial computation, start a new one
                 if (partialComputation_ == null || vessel != attachedVessel)
                 {
+                    
                     // restart the public buffers
                     patchesBackBuffer_.Clear();
                     maxAccelBackBuffer_ = 0;
-
                     attachedVessel = vessel;
 
                     // no vessel, no calculation
@@ -120,7 +124,15 @@ namespace Predictor
                 }
 
                 // we are finished when there are no more partial computations to be done
-                bool finished = !partialComputation_.MoveNext();
+                //bool finished = !partialComputation_.MoveNext();
+                bool b = true;
+                while (b)
+                {
+                    b = partialComputation_.MoveNext();
+                }
+                //partialComputation_.MoveNext();
+
+                bool finished = true;
 
                 // when calculation is finished,
                 if (finished)
@@ -141,7 +153,7 @@ namespace Predictor
                 // how long did the calculation in this frame take?
                 frameTime_ += (float)incrementTime_.ElapsedMilliseconds;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 ++errorCount_;
                 throw;
@@ -155,21 +167,24 @@ namespace Predictor
                 aerodynamicModel_ = AerodynamicModelFactory.GetModel(vessel, vessel.mainBody);
             else
                 aerodynamicModel_.IncrementalUpdate();
-
             // create new VesselState from vessel, or null if it's on the ground
-            var state = vessel.LandedOrSplashed ? null : new VesselState(vessel);
-
+            var state = new VesselState(vessel);
             // iterate over patches until MaxPatchCount is reached
             for (int patchIdx = 0; patchIdx < Settings.MaxPatchCount; ++patchIdx)
             {
                 // stop if we don't have a vessel state
                 if (state == null)
-                    break;
+                {
+                    state = new VesselState(vessel);
+                }
 
                 // If we spent more time in this calculation than allowed, pause until the next frame
-                if (incrementTime_.ElapsedMilliseconds > MaxIncrementTime)
-                    yield return false;
 
+
+                if (incrementTime_.ElapsedMilliseconds > MaxIncrementTime)
+                {
+                    yield return false;
+                }
                 // if we have a patched conics solver, check for maneuver nodes
                 if (null != attachedVessel.patchedConicSolver)
                 {
@@ -187,10 +202,16 @@ namespace Predictor
                     }
 
                     // Add one patch, then pause execution after every patch
-                    foreach (var result in AddPatch(state, profile))
+                    foreach (bool result in AddPatch(state, true))
+                        yield return false;
+                } else
+                {
+
+                    // Add one patch, then pause execution after every patch
+                    foreach (bool result in AddPatch(state, false))
                         yield return false;
                 }
-
+                
                 state = AddPatch_outState;
             }
         }
@@ -235,12 +256,17 @@ namespace Predictor
             return to;
         }
         
-        private IEnumerable<bool> AddPatch(VesselState startingState, DescentProfile profile)
+        private IEnumerable<bool> AddPatch(VesselState startingState, bool isActiveVessel)
         {
-            if (null == attachedVessel.patchedConicSolver)
+
+
+            if (isActiveVessel)
             {
-                UnityEngine.Debug.LogWarning("Trajectories: AddPatch() attempted when patchedConicsSolver is null; Skipping.");
-                yield break;
+                if (null == attachedVessel.patchedConicSolver)
+                {
+                    UnityEngine.Debug.LogWarning("Trajectories: AddPatch() attempted when patchedConicsSolver is null; Skipping.");
+                    yield break;
+                }
             }
 
             CelestialBody body = startingState.ReferenceBody;
@@ -257,13 +283,6 @@ namespace Predictor
             // so we populate it with the current orbit and associated encounters etc.
             var flightPlan = new List<Orbit>();
             for (var orbit = attachedVessel.orbit; orbit != null && orbit.activePatch; orbit = orbit.nextPatch)
-            {
-                if (attachedVessel.patchedConicSolver.flightPlan.Contains(orbit))
-                    break;
-                flightPlan.Add(orbit);
-            }
-
-            foreach (var orbit in attachedVessel.patchedConicSolver.flightPlan)
             {
                 flightPlan.Add(orbit);
             }

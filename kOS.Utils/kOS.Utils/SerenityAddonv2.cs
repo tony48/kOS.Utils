@@ -24,6 +24,7 @@ using System.IO;
 using Expansions.Serenity;
 using kOS.Safe.Encapsulation.Suffixes;
 using kOS.Safe.Exceptions;
+using System.Reflection;
 
 namespace kOS.Utils
 {
@@ -212,9 +213,23 @@ namespace kOS.Utils
             AddSuffix("ENGAGE", new NoArgsVoidSuffix(rotor.EngageMotor));
             AddSuffix("DISENGAGE", new NoArgsVoidSuffix(rotor.DisengageMotor));
             AddSuffix("LOCKED", new SetSuffix<BooleanValue>(() => rotor.servoIsLocked, LockServo));
-            AddSuffix("RPMLIMIT", new SetSuffix<ScalarValue>(() => rotor.rpmLimit, value => rotor.rpmLimit = value));
+            AddSuffix("RPMLIMIT", new SetSuffix<ScalarValue>(() => rotor.rpmLimit, value => SetRPM((float)value)));
             AddSuffix("MAXTORQUE", new SetSuffix<ScalarValue>(() => rotor.maxTorque, value => rotor.maxTorque = value));
             AddSuffix("CURRENTRPM", new Suffix<ScalarValue>(() => rotor.currentRPM));
+            AddSuffix("TORQUELIMIT", new SetSuffix<ScalarValue>(() => rotor.servoMotorLimit, value => rotor.servoMotorLimit = value));
+        }
+
+        private void SetRPM(float RPM)
+        {
+            rotor.Fields["rpmLimit"].SetValue(RPM, rotor);
+            object[] parametersArray = new object[] { UI_Scene.Flight };
+            //MonoUtilities.RefreshPartContextWindow(part.Part);
+            //rotor.GetType().GetField("currentVelocityLimit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, RPM);
+            //BaseAxisField axis = (BaseAxisField)rotor.GetType().GetField("rpmLimitAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(rotor);
+            //axis.SetAxis(RPM);
+            typeof(BaseServo).GetField("partActionMenuOpen", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, true);
+            rotor.GetType().GetMethod("UpdatePAWUI", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(rotor, parametersArray);
+            typeof(BaseServo).GetField("partActionMenuOpen", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, false);
         }
         
         private void LockServo(BooleanValue b)

@@ -33,7 +33,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="kOS, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\Desktop\KSP_apex\GameData\kOS\Plugins\kOS.dll</HintPath>
@@ -41,15 +41,21 @@
         <Reference Include="kOS.Safe, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\Desktop\KSP_apex\GameData\kOS\Plugins\kOS.Safe.dll</HintPath>
         </Reference>
+        <Reference Include="KRPC, Version=0.4.8.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\Downloads\krpc-0.4.8\GameData\kRPC\KRPC.dll</HintPath>
+        </Reference>
+        <Reference Include="KRPC.SpaceCenter, Version=0.4.8.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\Downloads\krpc-0.4.8\GameData\kRPC\KRPC.SpaceCenter.dll</HintPath>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+          <HintPath>..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
