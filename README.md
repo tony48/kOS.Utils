@@ -1,13 +1,13 @@
 # kOS.Utils
 
 ## Table of contents
-- [Sockets]
-- [Orbital functions]
-- [Input]
-- [Screen]
-- [Impact Prediction] (see Predictor if you are looking for predictions on atmopheric bodies)
-- [Predictor]
-- [Breaking Ground]
+- [Sockets](https://github.com/tony48/kOS.Utils/blob/master/README.md#sockets)
+- [Orbital functions](https://github.com/tony48/kOS.Utils#orbital-functions)
+- [Input](https://github.com/tony48/kOS.Utils#input)
+- [Screen](https://github.com/tony48/kOS.Utils#screen)
+- [Impact Prediction](https://github.com/tony48/kOS.Utils#impact-prediction) (see Predictor if you are looking for predictions on atmopheric bodies)
+- [Predictor](https://github.com/tony48/kOS.Utils#predictor)
+- [Breaking Ground](https://github.com/tony48/kOS.Utils#breakingground)
 
 ## Sockets
 
