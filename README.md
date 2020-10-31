@@ -1,4 +1,48 @@
 # kOS.Utils
+
+## Table of contents
+- [Sockets]
+- [Orbital functions]
+- [Input]
+- [Screen]
+- [Impact Prediction] (see Predictor if you are looking for predictions on atmopheric bodies)
+- [Predictor]
+- [Breaking Ground]
+
+## Sockets
+
+### Addon
+
+To access socket functions, use ADDONS:SOCK.
+Example : ADDONS:SOCK:CONNECT("127.0.0.1", 11000).
+
+- Connect(string ipAddress, scalar port)
+
+  Returns a kOSSocket object and connect it to a server socket at the given IP address and port.
+  
+### kOSSocket
+
+- Send(string message)
+
+  Send a message to the socket server. THE SERVER MUST DECODE THE MESSAGE AS UTF-8.
+  
+- Queue
+
+  Returns the message queue. All the received messages are in the queue. See [here](https://ksp-kos.github.io/KOS/structures/collections/queue.html) for the queue documentation. THE SERVER MUST SEND ALL THE MESSAGES IN UTF-8.
+  
+- Close()
+
+  Close the socket.
+
+### Example script
+
+```
+set socket to addons:sock:connect("127.0.0.1", 11000). // create a socket and connect it to 127.0.0.1:11000
+socket:send("This is a test").  // Send "This is a test"
+wait until not socket:queue:empty. // Wait until we have receiced something
+print socket:queue:pop(). // print the received message and remove it from the queue
+```
+
 ## Orbital functions
 
 To access orbital functions, use ADDONS:OBT.
