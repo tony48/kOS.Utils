@@ -33,7 +33,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\Downloads\ksp-win64-1.8.1\KSP_win64\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\..\..\..\..\Desktop\KSP 191\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="kOS, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\Downloads\kOS-v1.2.1.0\GameData\kOS\Plugins\kOS.dll</HintPath>
@@ -46,7 +46,7 @@
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\Downloads\ksp-win64-1.8.1\KSP_win64\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\..\..\..\..\Desktop\KSP 191\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\..\Desktop\KSP_apex\KSP_x64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
@@ -56,6 +56,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AxisGroups.cs" />
         <Compile Include="Landing.cs" />
         <Compile Include="Orbital.cs" />
         <Compile Include="Input.cs" />

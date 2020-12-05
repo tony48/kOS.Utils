@@ -25,6 +25,7 @@ using Expansions.Serenity;
 using kOS.Safe.Encapsulation.Suffixes;
 using kOS.Safe.Exceptions;
 using System.Reflection;
+using UnityEngine;
 
 namespace kOS.Utils
 {
@@ -103,12 +104,19 @@ namespace kOS.Utils
             AddSuffix("EXTEND", new NoArgsVoidSuffix(servo.ExtendPiston));
             AddSuffix("RETRACT", new NoArgsVoidSuffix(servo.RetractPiston));
             AddSuffix("CURRENTEXTENSION", new Suffix<ScalarValue>(() => servo.currentExtension));
-            AddSuffix("TARGETEXTENSION", new SetSuffix<ScalarValue>(() => servo.targetExtension, value => servo.targetExtension = value));
+            AddSuffix("TARGETEXTENSION", new SetSuffix<ScalarValue>(() => (ScalarValue)servo.Fields["targetExtension"].GetValue(servo), value => SetTargetExt(value)));
             AddSuffix("SPEED", new SetSuffix<ScalarValue>(() => servo.traverseVelocity, value => servo.traverseVelocity = value));
             AddSuffix("ENGAGE", new NoArgsVoidSuffix(servo.EngageMotor));
             AddSuffix("DISENGAGE", new NoArgsVoidSuffix(servo.DisengageMotor));
             AddSuffix("LOCKED", new SetSuffix<BooleanValue>(() => servo.servoIsLocked, LockServo));
             AddSuffix("PART", new Suffix<PartValue>(() => part));
+        }
+
+        private void SetTargetExt(ScalarValue ext)
+        {
+            BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoPiston)
+                .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(servo);
+            field.SetValue((float) ext, field.module);
         }
         
         private void LockServo(BooleanValue b)
@@ -156,14 +164,21 @@ namespace kOS.Utils
         private void InitializeSuffixes()
         {
             AddSuffix("TARGETANGLE", new SetSuffix<ScalarValue>(() => servo.targetAngle, value => servo.targetAngle = value));
-            AddSuffix("CURRENTANGLE", new Suffix<ScalarValue>(() => servo.currentAngle));
+            AddSuffix("CURRENTANGLE", new Suffix<ScalarValue>(GetCurrentAngle));
             AddSuffix("SPEED", new SetSuffix<ScalarValue>(() => servo.traverseVelocity, value => servo.traverseVelocity = value));
             AddSuffix("ENGAGE", new NoArgsVoidSuffix(servo.EngageMotor));
             AddSuffix("DISENGAGE", new NoArgsVoidSuffix(servo.DisengageMotor));
             AddSuffix("LOCKED", new SetSuffix<BooleanValue>(() => servo.servoIsLocked, LockServo));
             AddSuffix("PART", new Suffix<PartValue>(() => part));
         }
-        
+
+        private ScalarValue GetCurrentAngle()
+        {
+            float angle = servo.modelInitialAngle + (float) typeof(ModuleRoboticServoHinge)
+                .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(servo, null);
+            return angle;
+        }
         private void LockServo(BooleanValue b)
         {
             if (b)
@@ -215,21 +230,34 @@ namespace kOS.Utils
             AddSuffix("LOCKED", new SetSuffix<BooleanValue>(() => rotor.servoIsLocked, LockServo));
             AddSuffix("RPMLIMIT", new SetSuffix<ScalarValue>(() => rotor.rpmLimit, value => SetRPM((float)value)));
             AddSuffix("MAXTORQUE", new SetSuffix<ScalarValue>(() => rotor.maxTorque, value => rotor.maxTorque = value));
-            AddSuffix("CURRENTRPM", new Suffix<ScalarValue>(() => rotor.currentRPM));
-            AddSuffix("TORQUELIMIT", new SetSuffix<ScalarValue>(() => rotor.servoMotorLimit, value => rotor.servoMotorLimit = value));
+            AddSuffix("CURRENTRPM", new Suffix<ScalarValue>(GetRotorRPM));
+            AddSuffix("TORQUELIMIT", new SetSuffix<ScalarValue>(() => (ScalarValue)rotor.Fields["servoMotorLimit"].GetValue(rotor), SetTorque));
+        }
+
+        private ScalarValue GetRotorRPM()
+        {
+            return (float)typeof(ModuleRoboticServoRotor)
+                .GetField("transformRateOfMotion", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(rotor);
+        }
+
+        private void SetTorque(ScalarValue torque)
+        {
+            rotor.Fields["servoMotorLimit"].SetValue((float)torque, rotor);
+            //typeof(ModuleRoboticServoRotor).GetField("servoMotorLimit", )
         }
 
         private void SetRPM(float RPM)
         {
-            rotor.Fields["rpmLimit"].SetValue(RPM, rotor);
-            object[] parametersArray = new object[] { UI_Scene.Flight };
-            //MonoUtilities.RefreshPartContextWindow(part.Part);
-            //rotor.GetType().GetField("currentVelocityLimit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, RPM);
-            //BaseAxisField axis = (BaseAxisField)rotor.GetType().GetField("rpmLimitAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(rotor);
-            //axis.SetAxis(RPM);
-            typeof(BaseServo).GetField("partActionMenuOpen", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, true);
-            rotor.GetType().GetMethod("UpdatePAWUI", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(rotor, parametersArray);
-            typeof(BaseServo).GetField("partActionMenuOpen", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, false);
+            BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(rotor);
+            field.SetValue(RPM, field.module);
+            //typeof(ModuleRoboticServoRotor)
+            //.GetMethod("UpdateAxisFieldHardLimit", BindingFlags.Instance | BindingFlags.NonPublic)
+            //.Invoke(rotor, new object[] {"rpmLimitAxisField", new Vector2(0f, RPM)});
+            //rotor.Fields["rpmLimit"].SetValue(RPM, rotor);
+            //object[] parametersArray = new object[] { UI_Scene.Flight };
+            //BaseField a = typeof(BaseServo).GetField("partActionMenuOpen", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(rotor).SetValue(rotor, true);
+            //rotor.GetType().GetMethod("UpdatePAWUI", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(rotor, parametersArray);
+            //typeof(BaseServo).GetField("partActionMenuOpen", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(rotor, false);
         }
         
         private void LockServo(BooleanValue b)
@@ -279,7 +307,7 @@ namespace kOS.Utils
         private void InitializeSuffixes()
         {
             AddSuffix("TARGETANGLE", new SetSuffix<ScalarValue>(() => servo.targetAngle, value => servo.targetAngle = value));
-            AddSuffix("CURRENTANGLE", new Suffix<ScalarValue>(() => servo.currentAngle));
+            AddSuffix("CURRENTANGLE", new Suffix<ScalarValue>(GetCurrentAngle));
             AddSuffix("INVERTED", new SetSuffix<BooleanValue>(() => servo.inverted, value => servo.inverted = value));
             AddSuffix("SPEED", new SetSuffix<ScalarValue>(() => servo.traverseVelocity, value => servo.traverseVelocity = value));
             AddSuffix("ENGAGE", new NoArgsVoidSuffix(servo.EngageMotor));
@@ -287,6 +315,12 @@ namespace kOS.Utils
             AddSuffix("LOCKED", new SetSuffix<BooleanValue>(() => servo.servoIsLocked, LockServo));
             AddSuffix("PART", new Suffix<PartValue>(() => part));
 
+        }
+
+        private ScalarValue GetCurrentAngle()
+        {
+            return (float)typeof(ModuleRoboticRotationServo)
+                .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(servo, null);
         }
 
         private void LockServo(BooleanValue b)
