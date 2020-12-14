@@ -79,15 +79,22 @@ namespace kOS.Utils
 
         private ScalarValue TrueAnomalyAtAN(Orbitable obt, Orbitable tgt)
         {
-            if (ReferenceEquals(tgt, null))
-                throw new ArgumentNullException(nameof(tgt));
+            if (tgt == null)
+            {
+                Vector3d vectorToAN = Vector3d.Cross(obt.Orbit.referenceBody.transform.up, SwappedOrbitNormal(obt.Orbit));
+                return TrueAnomalyFromVector(obt.Orbit, vectorToAN);
+            }
             return ClampAngle180(FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(obt.Orbit, tgt.Orbit));
         }
 
         private ScalarValue TrueAnomalyAtDN(Orbitable obt, Orbitable tgt)
         {
-            if (ReferenceEquals(tgt, null))
-                throw new ArgumentNullException(nameof(tgt));
+            if (tgt == null)
+            {
+                Vector3d vectorToAN = Vector3d.Cross(obt.Orbit.referenceBody.transform.up, SwappedOrbitNormal(obt.Orbit));
+                double ta = TrueAnomalyFromVector(obt.Orbit, vectorToAN);
+                return ClampAngle360(ta + 180);
+            }
             return ClampAngle180(FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(obt.Orbit, tgt.Orbit));
         }
 
@@ -127,6 +134,66 @@ namespace kOS.Utils
             if (angle > 180)
                 angle -= 360;
             return angle;
+        }
+        
+        //normalized vector perpendicular to the orbital plane
+        //convention: as you look down along the orbit normal, the satellite revolves counterclockwise
+        public static Vector3d SwappedOrbitNormal(Orbit o)
+        {
+            return -SwapYZ(o.GetOrbitNormal()).normalized;
+        }
+        
+        public static Vector3d SwappedRelativePositionAtPeriapsis(Orbit o)
+        {
+            Vector3d vectorToAN = Quaternion.AngleAxis(-(float)o.LAN, Planetarium.up) * Planetarium.right;
+            Vector3d vectorToPe = Quaternion.AngleAxis((float)o.argumentOfPeriapsis, SwappedOrbitNormal(o)) * vectorToAN;
+            return o.PeR * vectorToPe;
+        }
+        
+        public static Vector3d SwapYZ(Vector3d v)
+        {
+            return Reorder(v, 132);
+        }
+        public static Vector3d Reorder(Vector3d vector, int order)
+        {
+            switch (order)
+            {
+                case 123:
+                    return new Vector3d(vector.x, vector.y, vector.z);
+                case 132:
+                    return new Vector3d(vector.x, vector.z, vector.y);
+                case 213:
+                    return new Vector3d(vector.y, vector.x, vector.z);
+                case 231:
+                    return new Vector3d(vector.y, vector.z, vector.x);
+                case 312:
+                    return new Vector3d(vector.z, vector.x, vector.y);
+                case 321:
+                    return new Vector3d(vector.z, vector.y, vector.x);
+            }
+            throw new ArgumentException("Invalid order", "order");
+        }
+        
+        public static double TrueAnomalyFromVector(Orbit o, Vector3d vec)
+        {
+            Vector3d oNormal = SwappedOrbitNormal(o);
+            Vector3d projected = Vector3d.Exclude(oNormal, vec);
+            Vector3d vectorToPe = SwappedRelativePositionAtPeriapsis(o);
+            double angleFromPe = Vector3d.Angle(vectorToPe, projected);
+
+            //If the vector points to the infalling part of the orbit then we need to do 360 minus the
+            //angle from Pe to get the true anomaly. Test this by taking the the cross product of the
+            //orbit normal and vector to the periapsis. This gives a vector that points to center of the
+            //outgoing side of the orbit. If vectorToAN is more than 90 degrees from this vector, it occurs
+            //during the infalling part of the orbit.
+            if (Math.Abs(Vector3d.Angle(projected, Vector3d.Cross(oNormal, vectorToPe))) < 90)
+            {
+                return angleFromPe;
+            }
+            else
+            {
+                return 360 - angleFromPe;
+            }
         }
     }
 }
