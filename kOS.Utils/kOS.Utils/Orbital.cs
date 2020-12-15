@@ -43,6 +43,8 @@ namespace kOS.Utils
             AddSuffix("EccentricAnomalyAtUT", new TwoArgsSuffix<ScalarValue, Orbitable, ScalarValue>(EccentricAnomalyAtUT));
             AddSuffix("TrueAnomalyAtAN", new TwoArgsSuffix<ScalarValue, Orbitable, Orbitable>(TrueAnomalyAtAN));
             AddSuffix("TrueAnomalyAtDN", new TwoArgsSuffix<ScalarValue, Orbitable, Orbitable>(TrueAnomalyAtDN));
+            AddSuffix("TrueAnomalyAtEqAN", new OneArgsSuffix<ScalarValue, Orbitable>(TrueAnomalyAtEqAN));
+            AddSuffix("TrueAnomalyAtEqDN", new OneArgsSuffix<ScalarValue, Orbitable>(TrueAnomalyAtEqDN));
             AddSuffix("RelativeInclination", new TwoArgsSuffix<ScalarValue, Orbitable, Orbitable>(RelativeInclination));
         }
         
@@ -79,23 +81,25 @@ namespace kOS.Utils
 
         private ScalarValue TrueAnomalyAtAN(Orbitable obt, Orbitable tgt)
         {
-            if (tgt == null)
-            {
-                Vector3d vectorToAN = Vector3d.Cross(obt.Orbit.referenceBody.transform.up, SwappedOrbitNormal(obt.Orbit));
-                return TrueAnomalyFromVector(obt.Orbit, vectorToAN);
-            }
             return ClampAngle180(FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(obt.Orbit, tgt.Orbit));
+        }
+        
+        private ScalarValue TrueAnomalyAtEqAN(Orbitable obt)
+        {
+            Vector3d vectorToAN = Vector3d.Cross(obt.Orbit.referenceBody.transform.up, SwappedOrbitNormal(obt.Orbit));
+            return TrueAnomalyFromVector(obt.Orbit, vectorToAN);
         }
 
         private ScalarValue TrueAnomalyAtDN(Orbitable obt, Orbitable tgt)
         {
-            if (tgt == null)
-            {
-                Vector3d vectorToAN = Vector3d.Cross(obt.Orbit.referenceBody.transform.up, SwappedOrbitNormal(obt.Orbit));
-                double ta = TrueAnomalyFromVector(obt.Orbit, vectorToAN);
-                return ClampAngle360(ta + 180);
-            }
             return ClampAngle180(FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(obt.Orbit, tgt.Orbit));
+        }
+        
+        private ScalarValue TrueAnomalyAtEqDN(Orbitable obt)
+        {
+            Vector3d vectorToAN = Vector3d.Cross(obt.Orbit.referenceBody.transform.up, SwappedOrbitNormal(obt.Orbit));
+            double ta = TrueAnomalyFromVector(obt.Orbit, vectorToAN);
+            return ClampAngle360(ta + 180);
         }
 
         private ScalarValue RelativeInclination(Orbitable obt, Orbitable tgt)
