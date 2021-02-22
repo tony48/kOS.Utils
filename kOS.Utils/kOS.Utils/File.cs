@@ -39,6 +39,7 @@ namespace kOS.Utils
         private void InitializeSuffixes()
         {
             AddSuffix("READALLLINES", new OneArgsSuffix<ListValue<StringValue>, StringValue>(ReadLines));
+            AddSuffix("READALLTEXT", new OneArgsSuffix<StringValue, StringValue>(ReadText));
         }
 
         private ListValue<StringValue> ReadLines(StringValue path)
@@ -52,6 +53,11 @@ namespace kOS.Utils
             }
 
             return lines;
+        }
+
+        private StringValue ReadText(StringValue path)
+        {
+            return File.ReadAllText(KSPUtil.ApplicationRootPath + "Ships/Script/" + path);
         }
 
         public override BooleanValue Available()
