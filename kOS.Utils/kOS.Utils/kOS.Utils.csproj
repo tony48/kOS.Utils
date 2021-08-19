@@ -57,6 +57,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AxisGroups.cs" />
+        <Compile Include="CurveValue.cs" />
         <Compile Include="File.cs" />
         <Compile Include="Landing.cs" />
         <Compile Include="Orbital.cs" />
