@@ -1,6 +1,7 @@
 # kOS.Utils
 
 ## Table of contents
+- [File](https://github.com/tony48/kOS.Utils/blob/master/README.md#file)
 - [Sockets](https://github.com/tony48/kOS.Utils/blob/master/README.md#sockets)
 - [Orbital functions](https://github.com/tony48/kOS.Utils#orbital-functions)
 - [Input](https://github.com/tony48/kOS.Utils#input)
@@ -9,6 +10,19 @@
 - [Predictor](https://github.com/tony48/kOS.Utils#predictor)
 - [Breaking Ground](https://github.com/tony48/kOS.Utils#breakingground)
 
+## File
+
+To access file functions, use ADDONS:FILE.
+Example : ADDONS:FILE:READALLLINES("test.txt").
+
+- ReadAllLines(string path)
+
+  Return all the lines of the file in a List. The file must be placed in Ship/Script.
+  
+- ReadAllText(string path)
+
+  Return the text of the file as a string.
+  
 ## Sockets
 
 ### Addon
