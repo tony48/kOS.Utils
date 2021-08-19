@@ -21,7 +21,7 @@ Example : ADDONS:FILE:READALLLINES("test.txt").
   
 - ReadAllText(string path)
 
-  Return the text of the file as a string.
+  Return the text of the file as a string. The file must be placed in Ship/Script.
   
 ## Sockets
 
