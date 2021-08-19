@@ -17,11 +17,11 @@ Example : ADDONS:FILE:READALLLINES("test.txt").
 
 - ReadAllLines(string path)
 
-  Return all the lines of the file in a List. The file must be placed in Ship/Script.
+  Return all the lines of the file in a List. The file must be placed in Ships/Script.
   
 - ReadAllText(string path)
 
-  Return the text of the file as a string. The file must be placed in Ship/Script.
+  Return the text of the file as a string. The file must be placed in Ships/Script.
   
 ## Sockets
 
